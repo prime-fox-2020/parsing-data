@@ -1,6 +1,7 @@
 "use strict"
 
 const fs = require('fs')
+const faker = require('faker')
 const data = fs.readFileSync('./people.csv', 'utf8')
 // console.log(data)
 
@@ -67,9 +68,15 @@ class PersonParser {
 let parser = new PersonParser('people.csv')
 parser.people = dataInArrayOfObject
 // console.log(parser)
-parser.addPerson(parser.people.length, 'Reza', 'Rizky', 'xxx@gmail.com', '123456', '2020-04-01')
+parser.addPerson(parser.people.length+1, 'Reza', 'Rizky', 'xxx@gmail.com', '123456', '2020-04-01')
 // console.log(parser.people[parser.people.length-1])
+let firstName = faker['name'].firstName()
+let lastName = faker['name'].lastName()
+let email = faker['internet'].email()
+let phone = faker['phone'].phoneNumber()
+let now = faker['date'].recent()
+parser.addPerson(parser.people.length+1, firstName, lastName, email, phone, now)
 
 parser.save()
 
-console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
+// console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
