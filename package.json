@@ -1,0 +1,23 @@
+{
+  "name": "parsing-data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prime-fox-2020/parsing-data.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prime-fox-2020/parsing-data/issues"
+  },
+  "homepage": "https://github.com/prime-fox-2020/parsing-data#readme",
+  "dependencies": {
+    "faker": "^4.1.0"
+  }
+}

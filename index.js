@@ -1,5 +1,6 @@
 "use strict"
 const fs = require('fs')
+const faker = require('faker/locale/en')
 
 class Person {
   constructor(id, first_name, last_name, email, phone, createdAt){
@@ -119,14 +120,27 @@ class PersonParser {
 }
 
 let parser = new PersonParser('people.csv');
+const name = faker.name.findName().split(' ');
+const addPerson = {
+  first_name: name[0],
+  last_name: name[1],
+  email: faker.internet.exampleEmail(name[0], name[1]),
+  phone: faker.phone.phoneNumberFormat(2),
+  date: faker.date.past(10).toISOString()
+};
+const dateTime = {
+  year: addPerson.date.slice(0,4),
+  month: addPerson.date.slice(5,7),
+  date: addPerson.date.slice(8,10)
+}
 
 parser.addPerson(
   parser.people.length + 1,
-  'Kendrick',
-  'Lamar',
-  'kendricklamar@mail.com',
-  '1-373-588-1900',
-  parser.getDate(2011,12,20)
+  addPerson.first_name,
+  addPerson.last_name,
+  addPerson.email,
+  addPerson.phone,
+  parser.getDate(dateTime.year,dateTime.month,dateTime.date)
 );
 parser.save();
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`);
