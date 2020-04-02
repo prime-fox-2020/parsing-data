@@ -44,7 +44,11 @@ class PersonParser {
   save(){
     let writeToCsv = 'id,first_name,last_name,email,phone,created_at\n'
     for (let i = 0; i<this._people.length; i++){
-      writeToCsv += `${this._people[i].id},${this._people[i].first_name},${this._people[i].last_name},${this._people[i].email},${this._people[i].phone},${this._people[i].created_at}\n`
+      if (i === this._people.length -1){
+        writeToCsv += `${this._people[i].id},${this._people[i].first_name},${this._people[i].last_name},${this._people[i].email},${this._people[i].phone},${this._people[i].created_at}`
+      } else {
+        writeToCsv += `${this._people[i].id},${this._people[i].first_name},${this._people[i].last_name},${this._people[i].email},${this._people[i].phone},${this._people[i].created_at}\n`
+      }
     }
 
     fs.writeFileSync(`./${this._file}`,writeToCsv)
@@ -55,7 +59,7 @@ let parser = new PersonParser('people.csv')
 parser.read()
 console.log(`There are ${parser.people.length} people in the file '${parser._file}'.`)
 
-parser.addPerson(new Person(`${parser.people.length+1}`,'ronaldo','sigordo','ronale@mail.com','+123-13345-4646',new Date().toISOString()))
+parser.addPerson(new Person(`${parser.people.length+1}`,'ronaldo','sigorda','rooooonale@mail.com','+123-13345-4646',new Date().toISOString()))
 parser.save()
 
 parser.read()
