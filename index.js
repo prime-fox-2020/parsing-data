@@ -16,7 +16,6 @@ class Person {
 }
 
 class PersonParser {
-
   constructor(file) {
     this._file = file;
     this._people = [];
@@ -30,11 +29,10 @@ class PersonParser {
           _lastName: data[2],
           _email: data[3],
           _phone: data[4],
-          _createdAt: data[5]
+          _createdAt: new Date(data[5])
         })
       }
-    })
-
+    });
   }
 
   get people() {
@@ -52,7 +50,7 @@ class PersonParser {
   save() {
     let personData = 'id,first_name,last_name,email,phone,created_at';
     this._people.forEach((el) => {
-      personData += `\r\n${el._id},${el._firstName},${el._lastName},${el._email},${el._createdAt}`;
+      personData += `\r\n${el._id},${el._firstName},${el._lastName},${el._email},${el._phone},${el._createdAt.toISOString()}`;
       // console.log(`${el._id}, ${el._firstName}, ${el._lastName}, ${el._email}, ${el._createdAt}\r\n`)
     })
     fs.writeFileSync(this._file, personData);
@@ -61,9 +59,8 @@ class PersonParser {
 }
 
 let parser = new PersonParser('people.csv');
-console.log(parser.people)
+// console.log(parser.people)
 parser.addPerson(new Person(parseInt(parser.people[parser.people.length - 1]._id) + 1, 'Bagong', 'Jyay', 'bagong@bagongcorp.com', '0888812121'));
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`);
-console.log(parser.people[parser.people.length - 1]);
 
-// parser.save();
+parser.save();
