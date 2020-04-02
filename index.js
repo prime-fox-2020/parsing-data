@@ -10,7 +10,7 @@ class Person {
     this.last_name = last_name
     this.email = email
     this.phone = phone
-    this.created_at = created_at
+    this.created_at = new Date(created_at)
   }
 }
 
@@ -65,7 +65,8 @@ class PersonParser {
 }
 
 let parser = new PersonParser('people.csv')
-let fadhlan = new Person(parser.people.length+1, 'Fadhlan', 'Fariz', 'fadhlan@outlook.co.id', '021-2424123', '2014-01-02T08:27:26-08:00')
+console.log(parser.readAllData())
+let fadhlan = new Person(parser.people.length+1, 'Fadhlan', 'Fariz', 'fadhlan@outlook.co.id', '021-2424123', new Date())
 parser.addPerson(fadhlan)
 
-console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
+console.log(`There are ${parser.people.length - 1} people in the file '${parser.file}'.`)
