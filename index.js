@@ -63,4 +63,16 @@ let parser = new PersonParser('people.csv');
 // parser.addPerson(new Person('201', 'Abab', 'Abadi', 'abab@hactiv8.com', '+628123123', '2012-02-22T10:09:03-08:00'));
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 // console.log(parser.people[20]);
+
+const faker = require('faker');
+const fakeData = 10; // Jumlah data palsu yang ingin dibuat;
+for(let i = 1; i <= fakeData; i++){
+  let firstName = faker.name.firstName();
+  let lastName = faker.name.lastName();
+  let email = faker.internet.email();
+  let phone = faker.phone.phoneNumber();
+  let date = faker.date.past();
+  parser.addPerson(parser.people.length+i, firstName, lastName, email, phone, date);
+}
+
 parser.save();
