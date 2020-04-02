@@ -39,7 +39,23 @@ class PersonParser {
     return datas
   }
   save(){
-    
+    let datas = []
+    let data = [["id,first_name,last_name,email,phone,created_at"]]
+    this._people.forEach(person => {
+      let temp = []
+      temp.push(person.id)
+      temp.push(person.first_name)
+      temp.push(person.last_name)
+      temp.push(person.email)
+      temp.push(person.phone)
+      temp.push(person.created_at)
+      datas.push(temp)
+    })
+    datas.forEach(temp => {
+      data.push(temp.join(','))
+    })
+    fs.writeFileSync(this._file,data.join('\r\n'))
+    console.log((data.join('\n')))
   }
   addPerson(first_name,last_name,email,phone) {
     let getID = this.people[this.people.length-1].id + 1
@@ -49,7 +65,7 @@ class PersonParser {
 
 }
 
-let parser = new PersonParser('temp.csv')
+let parser = new PersonParser('people.csv')
 
 // console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 parser.addPerson("James","James","jamesjames@yahoo.com","12345")
