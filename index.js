@@ -18,10 +18,21 @@ class Person {
 let persons = [];
 let people = fs.readFileSync('people.csv', 'utf8');
 let arrayPeople = people.split('\n');
+let pepKey = arrayPeople[0].split(',');
 
-for (let i = 0; i < arrayPeople.length; i++) {
+for (let i = 1; i < arrayPeople.length; i++) {
   let temp = arrayPeople[i].split(',');
   persons.push(new Person(temp[0],temp[1],temp[2],temp[3],temp[4],temp[5]));
+}
+
+let strings = [`${pepKey.join(',')}`];
+for (let i = 0; i < persons.length; i++) {
+  let temp = '';
+  for (let j in pepKey) {
+    temp += persons[i][pepKey[j]];
+    if (j != pepKey.length-1) temp += ',';
+  }
+  strings.push(temp);
 }
 
 class PersonParser {
@@ -51,7 +62,29 @@ class PersonParser {
     return persons;
   }
 
-  addPerson() {}
+  addPerson(person) {
+    this._people.push(person);
+  }
+
+  save() {
+    let persons = this._people;
+    let people = fs.readFileSync(this._file, 'utf8');
+    let arrayPeople = people.split('\n');
+
+    let pepKey = arrayPeople[0].split(',');
+    let strings = [`${pepKey.join(',')}`];
+    for (let i = 0; i < persons.length; i++) {
+      let temp = '';
+      for (let j in pepKey) {
+        temp += persons[i][pepKey[j]];
+        if (j != pepKey.length-1) temp += ',';
+      }
+      strings.push(temp);
+    }
+    let ready = strings.join('\n');
+
+    fs.writeFileSync(this._file, ready);
+  }
 
 }
 
@@ -59,4 +92,5 @@ let parser = new PersonParser('people.csv')
 
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 
-// console.log(parser);
+// parser.addPerson(new Person('aaa','sss','aaa','bbb','ddd','bbb'));
+// parser.save();
