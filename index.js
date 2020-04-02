@@ -29,7 +29,11 @@ class PersonParser {
     return this._file
   }
 
-  addPerson() {}
+  addPerson(objOfPerson) {
+    this._people.push(objOfPerson)
+    console.log(objOfPerson)
+    this.save()
+  }
 
   readAllData(){
     const rawData = fs.readFileSync(this._file, 'utf8')
@@ -44,9 +48,24 @@ class PersonParser {
     return dataArrayOfObject
   }
 
+  save(){
+    let dataArrayOfObject = this._people
+    const header = 'id,first_name,last_name,email,phone,created_at\r\n'
+    let rawData = header
+    for(let i = 0; i < dataArrayOfObject.length; i++){
+      if(i === dataArrayOfObject.length - 1){
+        rawData += `${dataArrayOfObject[i].id},${dataArrayOfObject[i].first_name},${dataArrayOfObject[i].last_name},${dataArrayOfObject[i].email},${dataArrayOfObject[i].phone},${dataArrayOfObject[i].created_at}`
+      }else{
+        rawData += `${dataArrayOfObject[i].id},${dataArrayOfObject[i].first_name},${dataArrayOfObject[i].last_name},${dataArrayOfObject[i].email},${dataArrayOfObject[i].phone},${dataArrayOfObject[i].created_at}\r\n`
+      }
+    }
+    fs.writeFileSync('people.csv', rawData)
+  }
+
 }
 
 let parser = new PersonParser('people.csv')
-console.log(parser.readAllData())
+let fadhlan = new Person(parser.people.length+1, 'Fadhlan', 'Fariz', 'fadhlan@outlook.co.id', '021-2424123', '2014-01-02T08:27:26-08:00')
+parser.addPerson(fadhlan)
 
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
