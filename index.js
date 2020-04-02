@@ -42,7 +42,9 @@ class PersonParser {
     const allPersonData  = [];
     for (let i = 1; i < dataArr.length; i++) {
       const personArr = dataArr[i].split(',');
-      allPersonData.push(new Person(personArr[0], personArr[1], personArr[2], personArr[3], personArr[4], personArr[5]));
+      let date = new Date(personArr[5]);
+      console.log(date);
+      allPersonData.push(new Person(personArr[0], personArr[1], personArr[2], personArr[3], personArr[4], date));
     }
     return allPersonData;
   }
@@ -58,7 +60,7 @@ class PersonParser {
 }
 
 let parser = new PersonParser('people.csv');
-parser.addPerson(new Person('201', 'Abab', 'Abadi', 'abab@hactiv8.com', '+628123123', '2012-02-22T10:09:03-08:00'));
+// parser.addPerson(new Person('201', 'Abab', 'Abadi', 'abab@hactiv8.com', '+628123123', '2012-02-22T10:09:03-08:00'));
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
-// console.log(parser.people[200]);
+// console.log(parser.people[20]);
 parser.save();
