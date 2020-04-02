@@ -49,10 +49,46 @@ class PersonParser {
       this._people.push(new Person(temp[0],temp[1],temp[2],temp[3],temp[4],temp[5]))
     }
   }
-  addPerson() {}
+
+  addPerson(newData) {
+    this.people.push(newData)
+  }
+
+  save(){
+    //Ubah Data jadi String
+    let strData='id,first_name,last_name,email,phone,created_at \r\n'
+    for (let i = 0; i < parser.people.length; i++) {
+      if(i!==parser.people.length-1){
+        strData += `${parser.people[i].id},${parser.people[i].first_name},${parser.people[i].last_name},${parser.people[i].email},${parser.people[i].phone},${parser.people[i].created_at}\r\n`
+      }else{
+        strData += `${parser.people[i].id},${parser.people[i].first_name},${parser.people[i].last_name},${parser.people[i].email},${parser.people[i].phone},${parser.people[i].created_at}`
+      }
+    }
+
+    //Write File
+    const fs =require('fs');
+    fs.writeFileSync('./'+this._file,strData);
+  }
+
 
 }
+//Membuat Waktu Seperti data Yang di inginkan
+let waktuNow = new Date();
+let jamNow= waktuNow.getHours();
+if(jamNow<10){
+  jamNow = '0'+ jamNow
+}
+let mnitNow = waktuNow.getMinutes();
+if(mnitNow<10){
+  mnitNow = '0'+ mnitNow
+}
+waktuNow = waktuNow.toISOString().split('.')[0]+ `-${jamNow}:${mnitNow}`;
 
+
+//Proses
 let parser = new PersonParser('people.csv')
 parser.readFile()
+parser.addPerson(new Person(parser.people.length+1,'Nur','Habib','Nurhabib_tes@gmail.com','080989999',waktuNow))
+parser.save();
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
+
