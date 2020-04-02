@@ -20,18 +20,18 @@ class PersonParser {
     return this._people
   }
 
-  addPerson(id, first_name, last_name, email, phone) {
-    let created_at = new Date()
-    let hourUTC = created_at.getUTCHours()
-    if(hourUTC < 10){
-      hourUTC = '0' + hourUTC
-    }
-    let minUTC = created_at.getMinutes()
-    if(minUTC < 10){
-      minUTC = '0' + minUTC
-    }
-    created_at = created_at.toISOString().split('.')[0] + '-' + hourUTC + ':' + minUTC // <--- format date sesuai dengan bentuk format tanggal csv awal
-    const newMember = new Person(id, first_name, last_name, email, phone, created_at)
+  addPerson(id, first_name, last_name, email, phone, date) {
+    // let created_at = new Date()
+    // let hourUTC = created_at.getUTCHours()
+    // if(hourUTC < 10){
+    //   hourUTC = '0' + hourUTC
+    // }
+    // let minUTC = created_at.getMinutes()
+    // if(minUTC < 10){
+    //   minUTC = '0' + minUTC
+    // }
+    // created_at = created_at.toISOString().split('.')[0] + '-' + hourUTC + ':' + minUTC // <--- format date sesuai dengan bentuk format tanggal csv awal
+    const newMember = new Person(id, first_name, last_name, email, phone, date)
     this.people.push(newMember)
     console.log('Data added !')
     return this
@@ -45,8 +45,9 @@ class PersonParser {
 
     for(let i = 1; i < arrayOfString.length; i++){
       const buffer = arrayOfString[i].split(',')
-      let date = buffer[5]
-      let formatDate = new Date(date) // <-- formatting data to type of object
+      let date = new Date(buffer[5]) // how to formatting date to object
+      date = date.toISOString()
+      // let date = buffer[5]
       this._people.push(new Person(buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],date))
     }
     return this._people
@@ -74,7 +75,19 @@ let parser = new PersonParser('people.csv')
 parser.read()
 console.log(`There are ${parser.people.length} people in the file '${parser._file}'.`)
 
-parser.addPerson(parser.people.length+1, 'Charles', 'Jonathan', 'chrlsjnthn@gmail.com', '1-712-327-5317')
+
+const banyakDataYangDitambahkan = 10
+
+const faker = require('faker')
+for(let i = 1; i <= banyakDataYangDitambahkan; i++){
+  let firstName = faker.name.firstName()
+  let lastName = faker.name.lastName()
+  let email = faker.internet.email()
+  let phone = faker.phone.phoneNumber()
+  let date = faker.date.past().toISOString()
+  parser.addPerson(parser.people.length+1, firstName, lastName, email, phone, date)
+
+}
 parser.save()
 parser.read()
 console.log(`There are ${parser.people.length} people in the file '${parser._file}'.`)
