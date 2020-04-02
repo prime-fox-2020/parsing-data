@@ -25,7 +25,9 @@ class PersonParser {
   get people() {
     return this._people
   }
-  
+  get file(){
+    return this._file
+  }
   readCSV(){
     let data = fs.readFileSync(this._file, 'utf-8').split('\r\n')
     let datas = []
@@ -67,7 +69,7 @@ class PersonParser {
 
 let parser = new PersonParser('people.csv')
 
-// console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 parser.addPerson("James","James","jamesjames@yahoo.com","12345")
-// console.log(parser.people)
 parser.save()
+
+console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
