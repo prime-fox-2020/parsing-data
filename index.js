@@ -72,18 +72,8 @@ class PersonParser {
 
 
 }
-//Membuat Waktu Seperti data Yang di inginkan
-let waktuNow = new Date();
-let jamNow= waktuNow.getHours();
-if(jamNow<10){
-  jamNow = '0'+ jamNow
-}
-let mnitNow = waktuNow.getMinutes();
-if(mnitNow<10){
-  mnitNow = '0'+ mnitNow
-}
-waktuNow = waktuNow.toISOString().split('.')[0]+ `-${jamNow}:${mnitNow}`;
 
+let waktuNow = new Date();
 
 //Proses
 let parser = new PersonParser('people.csv')
