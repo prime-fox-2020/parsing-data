@@ -1,10 +1,7 @@
 "use strict"
-
 const fs = require('fs')
 
 class Person {
-  // Look at the above CSV file
-  // What attributes should a Person object have?
   constructor(id, first_name, last_name, email, phone, createdAt){
     this.id = id
     this.first_name = first_name
@@ -20,6 +17,7 @@ class PersonParser {
   constructor(file) {
     this._file = file;
     this._people = this.read();
+    this._date = this.saveDate();
   }
 
   get people() {
@@ -28,6 +26,10 @@ class PersonParser {
 
   get file(){
     return this._file;
+  }
+
+  get date(){
+    return this._date
   }
 
   read(){
@@ -45,19 +47,50 @@ class PersonParser {
       data.push(objData);
     }
 
+
     data.forEach(el => {
       this._people.push(new Person(
-        el.id,
+        Number(el.id),
         el.first_name,
         el.last_name,
         el.email,
         el.phone,
-        // new Date (el.created_at)
-        el.created_at
-      ))
+        new Date (el.created_at.slice(0, 10))
+        // el.created_at
+      ));
+    });
+    return this._people;
+  }
+
+  saveDate(){
+    let manyData = fs.readFileSync(`./${this.file}`, 'utf-8').split('\n');
+    let keys = manyData.shift().split(',');
+    let data = [];
+    this._date = []
+
+    for (let i = 0; i < manyData.length; i++) {
+      const splitData = manyData[i].split(',');
+      let objData = {};
+      for (let j = 0; j < splitData.length; j++) {
+        objData[keys[j]] = splitData[j];
+      }
+      data.push(objData);
+    }
+
+    data.forEach(el => {
+      this._date.push(el.created_at)
     });
 
-    return this._people;
+    return this._date
+  }
+
+  getDate(year, month, date){
+    const hour = Math.floor(Math.random() * 24);
+    const minute = Math.floor(Math.random() * 60);
+    const second = Math.floor(Math.random() * 60);
+
+    let result = `${year}-${month}-${date}T${hour}:${minute}:${second}-${Math.round(Math.random()) === 1 ? '07' : '08'}:00`;
+    return result;
   }
 
   addPerson(id, first_name, last_name, email, phone, created_at) {
@@ -67,38 +100,33 @@ class PersonParser {
       last_name,
       email,
       phone,
-      created_at
+      new Date (created_at.slice(0, 10))
     ));
-
-    return this;
+    this._date.push(created_at)
   }
 
   save(){
-    let data = 'id,first_name,last_name,email,phone,created_at';
-    
-    this.people.forEach(el => {
-      data += `\n${el.id},${el.first_name},${el.last_name},${el.email},${el.phone},${el.createdAt}`;
-    });
+    let keys = 'id,first_name,last_name,email,phone,created_at';
+    const data = this.people;
+    const date = this.date;
 
-    console.log(data)
+    for (let i = 0; i < data.length; i++) {
+      keys += `\n${data[i].id},${data[i].first_name},${data[i].last_name},${data[i].email},${data[i].phone},${date[i]}`;
+    }
 
-    fs.writeFileSync(`./${this.file}`, data);
+    fs.writeFileSync(`./${this.file}`, keys);
   }
-
 }
 
 let parser = new PersonParser('people.csv');
 
 parser.addPerson(
-  '202',
+  parser.people.length + 1,
   'Kendrick',
   'Lamar',
   'kendricklamar@mail.com',
   '1-373-588-1900',
-  '2012-07-15T12:06:16-07:00'
+  parser.getDate(2011,12,20)
 );
-
 parser.save();
-
-console.log(parser.people);
-// console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`);
+console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`);
