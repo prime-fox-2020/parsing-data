@@ -5,7 +5,7 @@ class Person {
   // Look at the above CSV file
   // What attributes should a Person object have?
   constructor(id,first_name,last_name,email,phone,created_at){
-    this.id = id
+    this.id = Number(id)
     this.first_name = first_name
     this.last_name = last_name
     this.email = email 
@@ -29,7 +29,7 @@ class PersonParser {
   readCSV(){
     let data = fs.readFileSync(this._file, 'utf-8').split('\r\n')
     let datas = []
-    for(let i=0;i<data.length;i++){
+    for(let i=1;i<data.length;i++){
       let temp = []
       temp = data[i].split(',')
       //Input ke class Person
@@ -38,13 +38,20 @@ class PersonParser {
     
     return datas
   }
-  addPerson() {
-
+  save(){
+    
+  }
+  addPerson(first_name,last_name,email,phone) {
+    let getID = this.people[this.people.length-1].id + 1
+    this._people.push(new Person(getID,first_name,last_name,email,phone,Date.now()))
+    
   }
 
 }
 
-let parser = new PersonParser('people.csv')
+let parser = new PersonParser('temp.csv')
 
 // console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
-console.log(parser.people)
+parser.addPerson("James","James","jamesjames@yahoo.com","12345")
+// console.log(parser.people)
+parser.save()
