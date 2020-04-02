@@ -3,8 +3,6 @@
 const fs = require('fs');
 
 class Person {
-  // Look at the above CSV file
-  // What attributes should a Person object have?
   constructor(id, first_name, last_name, email, phone, created_at){
     this.id = id;
     this.first_name = first_name;
@@ -34,8 +32,8 @@ class PersonParser {
     this._file = param;
   }
 
-  addPerson(array, person) {
-    array.push(person);
+  addPerson(newPerson) {
+    this.people.push(newPerson);
   }
 
   read(file) {
@@ -44,18 +42,23 @@ class PersonParser {
     const allPersonData  = [];
     for (let i = 1; i < dataArr.length; i++) {
       const personArr = dataArr[i].split(',');
-      const personObj = new Person(personArr[0], personArr[1], personArr[2], personArr[3], personArr[4], personArr[5]);
-      this.addPerson(allPersonData, personObj);
+      allPersonData.push(new Person(personArr[0], personArr[1], personArr[2], personArr[3], personArr[4], personArr[5]));
     }
     return allPersonData;
   }
 
-  write() {
-    
+  save() {
+    let writeBack = 'id,first_name,last_name,email,phone,created_at';
+    for (let i = 0; i < this.people.length; i++) {
+      writeBack += '\n' + Object.values(this.people[i]).join(',');
+    }
+    fs.writeFileSync(`./${this.file}`, writeBack);
   }
 
 }
 
 let parser = new PersonParser('people.csv');
-
+parser.addPerson(new Person('201', 'Abab', 'Abadi', 'abab@hactiv8.com', '+628123123', '2012-02-22T10:09:03-08:00'));
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
+// console.log(parser.people[200]);
+parser.save();
