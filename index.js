@@ -45,7 +45,8 @@ class PersonParser {
 
     for(let i = 1; i < arrayOfString.length; i++){
       const buffer = arrayOfString[i].split(',')
-      const date = buffer[5]
+      let date = buffer[5]
+      let formatDate = new Date(date) // <-- formatting data to type of object
       this._people.push(new Person(buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],date))
     }
     return this._people
