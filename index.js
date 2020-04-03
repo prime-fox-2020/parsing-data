@@ -4,13 +4,13 @@ const fs = require('fs')
 class Person {
   // Look at the above CSV file
   // What attributes should a Person object have?
-  constructor(id, first_name, last_name, email, phone, created_at){
+  constructor(id, first_name, last_name, email, phone, created_at = new Date()){
       this.id = id
       this.first_name = first_name
       this.last_name = last_name
       this.email = email
       this.phone = phone
-      this.created_at = created_at
+      this.created_at = new Date(created_at)
   }
 }
 
@@ -73,7 +73,7 @@ let parser = new PersonParser('people.csv')
 
 //console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 
-parser.addPerson(new Person(`${parser.people.length+1}`, 'akmaale', 'vtr', 'akmalia@gmail.com', '085774647359', new Date()))
+parser.addPerson(new Person(`${parser.people.length+1}`, 'akmaale', 'vtr', 'akmalia@gmail.com', '085774647359'))
 
 console.log(`There are ${parser.people.length} people in the file '${parser.file}'.`)
 
